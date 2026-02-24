@@ -6,7 +6,7 @@ Version: 5.0 | February 2026
 Status: Active
 Platforms: Claude Project, Custom GPT, Claude Code, OpenClaw
 
-**Change from v4.0:** Added guided onboarding (Welcome Message + input template). Added ICP Sharpening step before community mapping. Added Output 0 (Start Here — prioritized Week 1 actions). Added competitor-aware variant to reply templates. Added "Live Post Mode" for real-time custom outreach. Added Output 6 (Ongoing Cadence).
+**Change from v4.0:** Added ICP Sharpening step before community mapping. Added Output 0 (Start Here — prioritized Week 1 actions). Added competitor-aware variant to reply templates. Added "Live Post Mode" for real-time custom outreach. Added Output 6 (Ongoing Cadence). Added "Check-in Mode" — a third mode to process feedback after 20 interactions and return targeted adjustments.
 
 ---
 
@@ -22,7 +22,6 @@ Find people who are already talking about the problem you solve. Show up with a 
 
 ### 1.2 What This Skill Does
 
-- ✅ Greets new users with a guided onboarding message and input template
 - ✅ Reads a product spec and extracts the right variables
 - ✅ Challenges and refines the ICP before generating anything
 - ✅ Returns a prioritized "Start Here" list before the full playbook
@@ -32,6 +31,7 @@ Find people who are already talking about the problem you solve. Show up with a 
 - ✅ Includes competitor-aware reply variant in all templates
 - ✅ Supports "Live Post Mode" — paste a real post, get a custom reply + DM
 - ✅ Provides an ongoing outreach cadence for week 2+
+- ✅ Supports "Check-in Mode" — report back after 20 interactions, get targeted adjustments (not a new playbook)
 
 ### 1.3 What This Skill Does NOT Do
 
@@ -47,17 +47,17 @@ AI does:    Sharpen ICP → Map communities → Generate signals → Draft templ
 Human does: Choose where to engage → Personalize drafts → Send manually → Handle replies → Report back
 ```
 
-### 1.5 Two Operating Modes
+### 1.5 Three Operating Modes
 
 | Mode | When to use | Input | Output |
 |------|------------|-------|--------|
-| **Welcome** | No input yet (greeting, "start", "help") | None | Onboarding message + input template |
 | **Playbook Mode** | First run, new product | Product spec (.md or pasted) | Full playbook: Outputs 0–6 |
 | **Live Post Mode** | Already have the playbook, found a real post | Paste the actual post/thread | One custom reply + one custom DM, written for that specific post |
+| **Check-in Mode** | After ~20 interactions — report what happened | 6 data points (replies, DMs, response rates, what worked) | Targeted adjustments only — signal reprioritization, tone fix, ICP refinement if needed |
 
-If the user sends a greeting, "start", "help", or anything without a spec or post → show **Welcome Message**.
 If the user pastes a post or thread without a full spec → trigger **Live Post Mode** automatically.
 If the user provides a product spec → trigger **Playbook Mode**.
+If the user reports back performance data after real outreach → trigger **Check-in Mode**.
 
 ---
 
@@ -700,7 +700,94 @@ If it reads like a template: rewrite it.
 
 ---
 
-## 13. Success Criteria
+## 13. Check-in Mode
+
+**Triggered when:** the founder reports back after ~20 interactions with real performance data.
+
+This mode does not generate a new playbook. It returns targeted adjustments only — a delta, not a reset.
+
+### 13.1 Input
+
+The founder provides 6 data points:
+
+```
+1. Replies sent — how many got upvotes, responses, or follow-up engagement?
+2. DMs sent — how many got a response?
+3. Best platform — where did outreach perform best?
+4. Best signal type — which signal category led to the best conversations?
+5. Downvoted or removed replies — paste them if available
+6. Unexpected signals — threads or phrases that appeared but weren't in the playbook
+```
+
+If data is missing or incomplete: ask for what's needed, but only what's needed. Do not ask for the full 6 if the founder only has 3.
+
+### 13.2 Process
+
+```
+Parse performance data:
+  → Calculate reply engagement rate: upvoted or engaged / total sent
+  → Calculate DM response rate: responses / total sent
+  → Identify highest-performing platform + signal type combination
+  → Identify lowest-performing signals
+
+Run diagnostic checks:
+  → Reply engagement rate < 20% → flag for tone review
+  → DM response rate < 10% → flag for ICP review
+  → A signal got 0 responses after 5+ attempts → flag for retirement
+  → Unexpected signal appeared → flag for addition
+  → A platform got 0 engagement → flag for deprioritization
+```
+
+### 13.3 Output Format
+
+Output only the sections where something changed. Do not repeat what's working.
+
+```
+## Check-in Summary — [Date / Week X]
+
+**What's working:**
+→ [Signal type] on [Platform] — keep doing this
+
+**What to retire:**
+→ [Signal type] — reason: [low response after X attempts]
+
+**Adjusted signal priority (next 2 weeks):**
+1. [Signal type] — [Platform]
+2. [Signal type] — [Platform]
+3. [Signal type] — [Platform]
+
+[ONLY IF replies were downvoted]
+**Tone fix:**
+→ Rule broken: [specific rule, e.g., "used em dash on Reddit"]
+→ Corrected version: [rewritten reply]
+
+[ONLY IF DM response rate < 10%]
+**ICP refinement:**
+→ Current: [audience description]
+→ Narrowed to: [more specific audience] — reason: [what the data suggests]
+
+[ONLY IF unexpected signal appeared]
+**New signal to add:**
+→ Pattern: [phrase / thread type]
+→ Platform: [where it appeared]
+→ Engagement: [Reply / DM / Both]
+
+**Your next 5 actions (Week 2+):**
+1–5. [Same format as Start Here — specific, ordered, time-estimated]
+```
+
+### 13.4 Rules
+
+- Never regenerate the full playbook in response to a check-in
+- Never output a section that has no data to change
+- Tone fix: only if a reply was downvoted or removed — not preemptively
+- ICP refinement: only if DM response rate is below 10% — not as a default
+- New signal: only if something unexpected appeared with at least 2 matching examples
+- If all data is good and nothing needs changing → say so explicitly, give next 5 actions only
+
+---
+
+## 14. Success Criteria
 
 | Criteria | Target |
 |----------|--------|
@@ -714,10 +801,13 @@ If it reads like a template: rewrite it.
 | DM compliance | 100% reference a specific post, 0% from HN threads |
 | Live Post Mode quality | Passes "does this read like a real person wrote it" test |
 | Cadence realism | Weekly rhythm matches stated founder bandwidth |
+| Check-in Mode precision | Output contains only changed sections — no full playbook regeneration |
+| Check-in ICP refinement | Only triggered if DM response rate < 10% |
+| Check-in tone fix | Only triggered if a reply was downvoted or removed |
 
 ---
 
-## 14. Version History
+## 15. Version History
 
 | Version | Change |
 |---------|--------|
@@ -725,7 +815,7 @@ If it reads like a template: rewrite it.
 | v2.3 | Added buying signal library, DM templates, tone rules |
 | v3.x | Added Playwright execution, Reddit browser automation |
 | v4.0 | Removed all execution. Added X and HN. Pure AI research + draft skill. |
-| **v5.0** | **Added ICP Sharpening (Step 0), Output 0 (Start Here), competitor-aware reply variant, Live Post Mode, Output 6 (Ongoing Cadence).** |
+| **v5.0** | **Added ICP Sharpening (Step 0), Output 0 (Start Here), competitor-aware reply variant, Live Post Mode, Output 6 (Ongoing Cadence), Check-in Mode (third mode — closes the feedback loop).** |
 
 ---
 
