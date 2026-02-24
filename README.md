@@ -4,7 +4,7 @@ Drop in your product spec. Get a complete playbook: which communities to target,
 
 ## Quick Start
 
-1. Open `skill/SKILL-v5.md`
+1. Open `skill/SKILL-v5.1.md`
 2. Paste the contents into your Claude Project Instructions (or Custom GPT System Prompt)
 3. Drop in your product spec — get your playbook
 
@@ -21,20 +21,20 @@ first-1000-users/
 ├── SKILL-CARD.md          ← Overview: what the skill does, how it works
 │
 ├── skill/
-│   ├── SKILL-v5.md        ← Current version — paste this into Claude/GPT ✅
+│   ├── SKILL-v5.1.md        ← Current version — paste this into Claude/GPT ✅
 │   ├── SKILL-v4.md        ← Previous version
 │   ├── SKILL-v3.2-playwright.md   ← Reddit-only with Playwright automation
 │   └── SKILL-v3.1-reddit-only.md  ← Reddit-only with API
 │
 ├── spec/
-│   ├── spec-v5.md         ← Current spec: ICP sharpening, Start Here, Live Post Mode, Check-in Mode ✅
+│   ├── spec-v5.1.md         ← Current spec: ICP sharpening, Start Here, Live Post Mode, Check-in Mode ✅
 │   ├── spec-v4.md         ← Multi-platform, no execution
 │   ├── spec-v3.2.md       ← Playwright browser automation
 │   ├── spec-v3.1.md       ← Reddit API + OpenClaw
 │   └── spec-v2.md         ← Original prompt-only concept
 │
 ├── logic/
-│   ├── processing-logic-v5.md    ← How the AI processes a spec — all 3 modes (v5) ✅
+│   ├── processing-logic-v5.1.md    ← How the AI processes a spec — all 3 modes (v5) ✅
 │   ├── processing-logic-v4.md    ← Processing logic for v4
 │   ├── processing-logic-v3.2.md  ← Processing logic for Playwright version
 │   └── processing-logic-v3.1.md  ← Processing logic for API version
@@ -49,10 +49,10 @@ first-1000-users/
 
 | If you want to... | Use this |
 |-------------------|----------|
-| Run the skill today | `skill/SKILL-v5.md` |
+| Run the skill today | `skill/SKILL-v5.1.md` |
 | Understand what the skill does | `SKILL-CARD.md` |
-| Read the full specification | `spec/spec-v5.md` |
-| Understand the AI's processing flow | `logic/processing-logic-v5.md` |
+| Read the full specification | `spec/spec-v5.1.md` |
+| Understand the AI's processing flow | `logic/processing-logic-v5.1.md` |
 | See the research behind the strategy | `research/vibefounderresearch.pdf` |
 
 ---
@@ -61,7 +61,7 @@ first-1000-users/
 
 | Version | What changed |
 |---------|-------------|
-| **v5.0** | ICP Sharpening before playbook. Output 0 (Start Here). Competitor-aware reply variant. Live Post Mode. Output 6 (Ongoing Cadence). Check-in Mode (third mode — closes the feedback loop). |
+| **v5.1** | ICP Sharpening before playbook. Output 0 (Start Here). Competitor-aware reply variant. Live Post Mode. Output 6 (Ongoing Cadence). Check-in Mode (third mode — closes the feedback loop). |
 | v4.0 | Removed execution. Added X and Hacker News. Pure AI research + draft. |
 | v3.2 | Reddit-only with Playwright browser automation |
 | v3.1 | Reddit-only with Reddit API via OpenClaw |
