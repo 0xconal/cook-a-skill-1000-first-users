@@ -1,7 +1,7 @@
 # PROCESSING LOGIC — v5.0
 ## How the AI Processes a Product Spec into a Distribution Playbook
 
-**Change from v4.0:** Added Welcome Message trigger (no-input detection). Added ICP Sharpening (Step 0) with validation gates and derived variables. Added Start Here prioritization logic (Output 0). Added competitor-aware variant generation. Added Live Post Mode processing. Added Ongoing Cadence generation (Output 6).
+**Change from v4.0:** Added ICP Sharpening (Step 0) with validation gates and derived variables. Added Start Here prioritization logic (Output 0). Added competitor-aware variant generation. Added Live Post Mode processing. Added Ongoing Cadence generation (Output 6). Added Check-in Mode processing — parses 6 performance data points and returns targeted adjustments only.
 
 ---
 
@@ -9,11 +9,6 @@
 
 ```
 On first message from user:
-
-IF user sends greeting, "start", "help", or any message without a spec or post:
-  → Show WELCOME MESSAGE
-  → Display input template
-  → Wait for user to fill and paste the spec — do not run any pipeline
 
 IF user provides a product spec (structured description with product name, problem, audience):
   → Enter PLAYBOOK MODE
@@ -24,9 +19,15 @@ IF user pastes a post, thread, or tweet:
   → Run Live Post processing
   → If no spec in session: ask for ONE_LINER, PAIN_PHRASES, OFFER_TYPE only
 
+IF user reports back performance data (replies sent, DMs sent, response rates, what worked):
+  → Enter CHECK-IN MODE
+  → Run Check-in processing
+  → Do not regenerate the playbook
+
 IF unclear:
   → Ask: "Did you want me to build a playbook from your product spec,
-          or do you have a specific post you want to respond to?"
+          respond to a specific post you found,
+          or analyze results from your outreach so far?"
 ```
 
 ---
@@ -540,6 +541,82 @@ If no spec in session:
 
 ---
 
+## CHECK-IN MODE
+
+---
+
+## Check-in Processing
+
+### Detection
+
+```
+Trigger if:
+  → User pastes 6 data points matching the check-in format from Output 6
+  → User says "here are my results", "reporting back", "20 interactions done"
+  → User provides reply count + DM count + response rate in one message
+
+If data is partial (fewer than 6 points):
+  → Ask only for the missing data points — do not ask for the full format
+  → Do not enter Playbook Mode
+```
+
+### Processing Steps
+
+```
+1. Parse performance data:
+   → Extract: replies_sent, replies_engaged, dms_sent, dms_responded
+   → Calculate: reply_engagement_rate = replies_engaged / replies_sent
+   → Calculate: dm_response_rate = dms_responded / dms_sent
+   → Extract: best_platform, best_signal_type
+   → Extract: downvoted_or_removed_replies (if any)
+   → Extract: unexpected_signals (if any)
+
+2. Run diagnostic checks:
+   → reply_engagement_rate < 20%  → flag: tone_review_needed
+   → dm_response_rate < 10%       → flag: icp_refinement_needed
+   → A signal has 0 responses after 5+ attempts → flag: retire_signal
+   → unexpected_signal appeared with 2+ examples → flag: add_new_signal
+   → A platform got 0 engagement across all attempts → flag: deprioritize_platform
+
+3. Generate output sections (only for flagged issues):
+   → Always: signal reprioritization + next 5 actions
+   → If tone_review_needed: identify which rule was broken, rewrite the reply
+   → If icp_refinement_needed: narrow the TARGET_AUDIENCE based on what data suggests
+   → If retire_signal: remove from active list with reason
+   → If add_new_signal: define the pattern, platform, and engagement type
+   → If deprioritize_platform: move to secondary or remove from cadence
+
+4. Quality check:
+   → Does the output contain a full playbook? If yes → remove everything that wasn't changed
+   → Is the tone fix based on an actual downvoted reply? If not → remove tone fix section
+   → Is the ICP refinement triggered by actual < 10% DM rate? If not → remove ICP section
+   → Are next 5 actions formatted the same as Start Here? → must be yes
+```
+
+### Output Sections (conditional)
+
+```
+Always output:
+  - Performance summary (parsed numbers + interpretation)
+  - What's working (signals + platforms to double down on)
+  - What's not working (signals to retire)
+  - Adjusted signal priorities (ranked list for next 2 weeks)
+  - Next 5 actions (same format as Output 0 / Start Here)
+
+Conditionally output:
+  - Tone fix — ONLY if a reply was downvoted or removed
+  - ICP refinement — ONLY if DM response rate < 10%
+  - New signal — ONLY if an unexpected pattern appeared with 2+ examples
+
+Never output:
+  - The full playbook (Outputs 0–6)
+  - Community map (unchanged)
+  - Reply templates (unless tone fix requires a specific rewrite)
+  - DM templates (unless tone fix requires a specific rewrite)
+```
+
+---
+
 ## Step 0–7 Summary Flow (Playbook Mode)
 
 ```
@@ -581,6 +658,26 @@ Generate custom DM if appropriate (no templates)
 Quality check both outputs
    ↓
 Output: Custom reply + custom DM for this specific post
+```
+
+## Check-in Flow
+
+```
+Input: 6 performance data points (replies, DMs, rates, best platform, downvotes, surprises)
+   ↓
+Parse + calculate rates (reply engagement rate, DM response rate)
+   ↓
+Run diagnostic checks (tone_review? icp_refinement? retire_signal? add_signal?)
+   ↓
+Generate always-on sections (summary, what's working, what's not, signal priorities)
+   ↓
+Generate conditional sections only if triggered (tone fix / ICP refinement / new signal)
+   ↓
+Build next 5 actions (same format as Start Here, calibrated to Week 2+)
+   ↓
+Quality check: no full playbook in output, all conditionals correctly triggered
+   ↓
+Output: Targeted adjustments + next 5 actions
 ```
 
 ---
