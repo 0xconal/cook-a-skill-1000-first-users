@@ -1,7 +1,7 @@
-# PROCESSING LOGIC — v5.0
+# PROCESSING LOGIC — v5.2
 ## How the AI Processes a Product Spec into a Distribution Playbook
 
-**Change from v4.0:** Added ICP Sharpening (Step 0) with validation gates and derived variables. Added Start Here prioritization logic (Output 0). Added competitor-aware variant generation. Added Live Post Mode processing. Added Ongoing Cadence generation (Output 6). Added Check-in Mode processing — parses 6 performance data points and returns targeted adjustments only.
+**Change from v5.0:** Added web search steps at 3 points in the pipeline — Start Here query validation (Step 1.2), Community Map verification (Steps 2.1–2.4), and Search Signal live example replacement (Step 3.1). Added ✅ Verified / ⚠️ Estimated marking for all community map entries. Removed static AI-knowledge disclaimer from Community Map output.
 
 ---
 
@@ -189,6 +189,12 @@ Include:
   → "One thing NOT to do" — most common mistake for this product/audience combo
   → Tracking checklist (threads found, replies sent, DMs sent, responses received)
   → Feedback loop trigger: "after 20 interactions, come back with these numbers"
+
+Web search step:
+  → Before outputting the action list, run the search query for action #1
+  → If match found: annotate with "Live example found: [paraphrased title, date, engagement]"
+  → If no match: revise query and retry once; if still nothing, swap action #2 to top priority
+  → Note: paraphrase only — do not reproduce post text verbatim
 ```
 
 ---
@@ -219,6 +225,13 @@ Entry strategy:
   → NOT generic ("be helpful first")
   → Specific: "Lurk 1 week → answer 3 non-product questions → introduce product in week 2"
   → Vary by community size, DM culture, and SWITCHING_COST
+
+Web search step:
+  → Search for each candidate subreddit before listing
+  → Verify: posts exist in the last 7 days, subreddit is not banned/private
+  → Check sidebar/wiki for self-promo rules
+  → Score: add +1 to Activity axis if verified active; −1 if no recent posts found
+  → Mark output: ✅ Verified (active, rules checked) or ⚠️ Estimated (AI knowledge only)
 ```
 
 ### 2.2 Slack Mapping Logic
@@ -230,6 +243,12 @@ For each candidate workspace:
   3. Identify channel types: #help, #tools, #resources = high value
   4. Evaluate DM culture: founder/indie communities = most DM-receptive
   5. Entry strategy: which channel first, how long to read before posting
+
+Web search step:
+  → Search for a public join link for each candidate workspace
+  → Only list workspaces where a joinable link is confirmed
+  → Mark: ✅ Verified (join link found) or ⚠️ Estimated (no public link confirmed)
+  → If ⚠️: include the workspace but note "Join link not confirmed — search manually"
 ```
 
 ### 2.3 X Mapping Logic
@@ -250,6 +269,11 @@ For hashtags:
 For search queries:
   → Build from PAIN_PHRASES
   → Add: min_faves:5 or min_faves:10 for quality threads
+
+Web search step:
+  → For each account and hashtag, search for posts in the last 30 days
+  → Remove or mark ⚠️ any account/hashtag with no recent activity
+  → Mark: ✅ Verified (activity confirmed) or ⚠️ Estimated (AI knowledge only)
 ```
 
 ### 2.4 Hacker News Mapping Logic
@@ -272,6 +296,11 @@ HN audience:
   → Usually: technical early adopters, developers, startup founders
   → Not usually: non-technical buyers, enterprise decision-makers
   → Match to TARGET_AUDIENCE to assess fit
+
+Web search step:
+  → Run each proposed Ask HN query on hn.algolia.com before listing
+  → Only include queries that return at least 1 relevant thread in the last 3 months
+  → Mark: ✅ Verified (live threads found) or ⚠️ Estimated (no results confirmed)
 ```
 
 ---
@@ -310,6 +339,14 @@ For each of 5 categories (Direct Request, Comparison, Pain Point, Workflow Quest
    → Comparison: ≤ 2 weeks
    → Workflow Question: evergreen (can engage old threads)
    → Discussion: ≤ 7 days (only if still active)
+
+Web search step:
+  → For each signal, run the top Reddit or X search query before finalizing
+  → Replace the "Real example" field with an actual found post (paraphrased — do not reproduce verbatim)
+  → Record: paraphrased post content, date, platform, engagement
+  → If 0 results for a signal: flag "⚠️ Low current volume — re-run in 2–3 weeks"
+    Do NOT invent an example when no real post was found
+  → If results are found but all older than the recency window: flag "Active in past but not recently"
 ```
 
 Minimum: 4 signals per category. All product-specific. No "[problem]" placeholders.
@@ -682,4 +719,4 @@ Output: Targeted adjustments + next 5 actions
 
 ---
 
-*End of Processing Logic — first-1000-users v5.0*
+*End of Processing Logic — first-1000-users v5.2*
