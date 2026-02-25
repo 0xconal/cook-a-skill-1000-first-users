@@ -18,7 +18,7 @@ No automation. No fake engagement. Just a faster path from "I have a product" to
 
 ## Quick Start
 
-1. Open `skill/SKILL-v5.1.md`
+1. Open `skill.md`
 2. Paste the contents into your Claude Project Instructions (or Custom GPT System Prompt)
 3. Drop in your product spec — get your playbook
 
@@ -31,31 +31,17 @@ No installation. No API keys. No dependencies.
 ```
 first-1000-users/
 │
-├── README.md              ← You are here
-├── CHANGELOG.md           ← Version history + reasoning behind each decision
-├── CLAUDE.md              ← Design decisions (why the skill is built this way)
-├── skill-card.md          ← Overview: what the skill does, how it works
+├── README.md                    ← You are here
+├── skill.md                     ← Runtime prompt — paste this into Claude/GPT ✅
+├── spec.md                      ← Full specification: all 3 modes ✅
+├── skill-card.md                ← Overview: what the skill does, how it works
 │
-├── skill/
-│   └── SKILL-v5.1.md      ← Current version — paste this into Claude/GPT ✅
+├── ai showcase/                 ← AI process screenshots + demo files
 │
-├── spec/
-│   └── spec.md            ← Full specification: all 3 modes, ICP sharpening, Check-in ✅
-│
-├── logic/
-│   └── processing-logic-v5.1.md  ← How the AI processes inputs across all 3 modes ✅
-│
-├── ai showcase/           ← AI process screenshots for presentation
-│   ├── 1. Brainstorming.png
-│   ├── 2. Prompt for Spec.png
-│   ├── 3. AI Iteration.png
-│   ├── 3.1–3.3. AI Iteration.png
-│   ├── 4. AI Solving Problems.png
-│   ├── 4.1. AI Solving Problems.png
-│   └── demo-live.md
-│
-└── research/
-    └── vibefounderresearch.pdf ← GTM research deck: solo founders × vibe coding
+├── CHANGELOG.md                 ← Version history + reasoning
+├── CLAUDE.md                    ← Design decisions (why the skill is built this way)
+├── processing-logic-v5.1.md     ← How the AI processes inputs across all 3 modes
+└── vibefounderresearch.pdf      ← GTM research: solo founders × vibe coding
 ```
 
 ---
@@ -64,11 +50,11 @@ first-1000-users/
 
 | If you want to... | Use this |
 |-------------------|----------|
-| Run the skill today | `skill/SKILL-v5.1.md` |
+| Run the skill today | `skill.md` |
 | Understand what the skill does | `skill-card.md` |
-| Read the full specification | `spec/spec.md` |
-| Understand the AI's processing flow | `logic/processing-logic-v5.1.md` |
-| See the research behind the strategy | `research/vibefounderresearch.pdf` |
+| Read the full specification | `spec.md` |
+| Understand the AI's processing flow | `processing-logic-v5.1.md` |
+| See the research behind the strategy | `vibefounderresearch.pdf` |
 | See AI process during development | `ai showcase/` |
 
 ---
@@ -77,8 +63,8 @@ first-1000-users/
 
 | Version | What changed |
 |---------|-------------|
-| **v5.1** | Check-in Mode (third mode — closes the feedback loop after 20 interactions). |
-| **v5.0** | ICP Sharpening before playbook. Output 0 (Start Here). Competitor-aware reply variant. Live Post Mode. Output 6 (Ongoing Cadence). |
+| **v5.1** | Check-in Mode — third mode that closes the feedback loop after 20 interactions |
+| **v5.0** | ICP Sharpening. Output 0 (Start Here). Competitor-aware reply variant. Live Post Mode. Ongoing Cadence. |
 | v4.0 | Removed execution. Added X and Hacker News. Pure AI research + draft. |
 | v3.2 | Reddit-only with Playwright browser automation |
 | v3.1 | Reddit-only with Reddit API via OpenClaw |
@@ -101,7 +87,7 @@ That's the right constraint for v5 — it keeps outreach authentic. But it's als
 
 | Problem | Solution |
 |---------|----------|
-| Running searches manually every day | Browser automation that runs the signal queries and surfaces matching threads — founder reviews, not AI decides |
+| Running searches manually every day | Browser automation that runs signal queries and surfaces matching threads — founder reviews, not AI decides |
 | Not knowing if a thread is worth engaging | Real-time relevance scoring based on signal type, recency, and community activity |
 | Losing track of what's been sent | Lightweight outreach tracker — which threads were replied to, which DMs are waiting |
 | No Slack workspace discovery | Automated discovery of open workspaces relevant to the ICP |
