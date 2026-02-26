@@ -40,7 +40,7 @@ first-1000-users/
 │
 ├── CHANGELOG.md                 ← Version history + reasoning
 ├── CLAUDE.md                    ← Design decisions (why the skill is built this way)
-├── processing-logic-v5.1.md     ← How the AI processes inputs across all 3 modes
+├── processing-logic.md     ← How the AI processes inputs across all 3 modes
 └── vibefounderresearch.pdf      ← GTM research: solo founders × vibe coding
 ```
 
