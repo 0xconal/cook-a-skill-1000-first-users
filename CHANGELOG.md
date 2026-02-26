@@ -4,7 +4,7 @@ Each version is not just "added features" — each version is a response to some
 
 ---
 
-## v5.0 — February 2026
+## v5.0
 
 **Theme: From playbook generator → thinking partner**
 
@@ -37,7 +37,7 @@ Weekly rhythm for 30 min/day and 2–3 hours/week. Feedback loop triggers after 
 
 ---
 
-## v4.0 — 2025
+## v4.0
 
 **Theme: The biggest pivot in the project's history — dropped execution, added platforms**
 
@@ -60,7 +60,7 @@ Two new platforms with distinct tone rules. HN is the most demanding — reply o
 
 ---
 
-## v3.2 — 2024
+## v3.2
 
 **Theme: Browser automation**
 
@@ -75,7 +75,7 @@ Automatically opens Chrome, navigates Reddit, finds posts matching signals, extr
 
 ---
 
-## v3.1 — 2024
+## v3.1
 
 **Theme: Reddit API integration**
 
@@ -90,7 +90,7 @@ Direct integration with the Reddit API to search and extract posts. Requires OAu
 
 ---
 
-## v2.3 — 2024
+## v2.3
 
 **Theme: Adding structure to the prompt-only approach**
 
@@ -104,7 +104,7 @@ Direct integration with the Reddit API to search and extract posts. Requires OAu
 
 ---
 
-## v1.0 — 2024
+## v1.0
 
 **Theme: Proof of concept**
 
